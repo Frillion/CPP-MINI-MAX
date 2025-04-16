@@ -1,4 +1,5 @@
 def evaluate_state(game, agent_color):
+
     """Evaluates the board from the agent's perspective using a simple heuristic"""
     
     #Check for win
