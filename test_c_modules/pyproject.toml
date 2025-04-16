@@ -1,0 +1,10 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "test"
+version = "0.1"
+
+[tool.setuptools]
+ext-modules = [{name="test", sources = ["test.cpp"]}]
