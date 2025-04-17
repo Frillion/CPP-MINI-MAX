@@ -1,6 +1,9 @@
+#include <cstdlib>
 #include <functional>
 #include <string>
 #include <unordered_map>
+#include <cmath>
+#include <vector>
 
 struct position{ 
     int x;
@@ -32,29 +35,10 @@ class State{
     std::unordered_map<position, std::string> board;
     std::string turn;
 
-    State(int width,int height){
-        this->width = width;
-        this->height = height;
-        this->turn = "white";
-        for(int i = 1; i < width + 1; i++){
-            board[{i,1}] = "W";
-            board[{i,2}] = "W";
-            board[{i,this->height}] = "B";
-            board[{i,this->height - 1}] = "B";
-        }
-        for(int x = 1; x < width; x++){
-            for(int y = 3; y < this->height - 1; y++){
-                board[{x,y}] = "";
-            }
-        }
-    }
+    State(int width,int height);
+    bool is_valid_move(position &curr_pos, position &next_pos);
+
+public:
+    bool apply_move(position &curr_pos, position &next_pos);
+    std::vector<position> get_legal_moves();
 };
-
-
-
-
-
-void foo(){
-    int x;
-    int y;
-}

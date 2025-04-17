@@ -176,3 +176,4 @@ cython_debug/
 logs/
 bin/
 objects/
+compile_commands.json

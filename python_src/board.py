@@ -41,7 +41,7 @@ class Board:
         # Define movement restrictions
         dx, dy = abs(x2 - x1), abs(y2 - y1)
         if not ((dx == 2 and dy == 1) or (dx == 1 and dy == 2)):
-            return False  
+            return False
 
         if (piece == "W" and y2 <= y1) or (piece == "B" and y2 >= y1):
             return False  # Can't move backwards
