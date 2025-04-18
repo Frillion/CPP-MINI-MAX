@@ -13,6 +13,15 @@ struct position{
     }
 };
 
+struct move{
+    position from;
+    position to;
+
+    position delta() const {
+        return {this->to.x - this->from.x, this->to.y - this->from.y};
+    }
+};
+
 template <>
 struct std::hash<position>
 {
@@ -30,15 +39,16 @@ struct std::hash<position>
 };
 
 class State{
+    const static position piece_moves[];
     int width;
     int height;
     std::unordered_map<position, std::string> board;
     std::string turn;
 
     State(int width,int height);
-    bool is_valid_move(position &curr_pos, position &next_pos);
+    bool is_valid_move(const move& mv);
 
 public:
-    bool apply_move(position &curr_pos, position &next_pos);
-    std::vector<position> get_legal_moves();
+    bool apply_move(const move& mv);
+    std::vector<move> get_legal_moves();
 };
