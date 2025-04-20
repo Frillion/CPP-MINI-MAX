@@ -111,14 +111,14 @@ std::vector<move> State::get_legal_moves(){
     return moves;
 }
 
-bool State::check_win(){
+Outcome State::check_win(){
     // If either black reaches end or white reaches end, this is then a Terminal state
     for(const auto& square : this->board){
         if(square.first.y == this->height && square.second == WHITE)
-            return true;
+            return WHITE_W;
 
         if(square.first.y == 1 && square.second == BLACK)
-            return true;
+            return BLACK_W;
     }
 
     // If neither player has legal moves to play it is a Terminal state
@@ -130,10 +130,10 @@ bool State::check_win(){
 
         if(opponent_legal_moves.empty()){
             this->turn = this->turn == WHITE ? BLACK : WHITE;// Clean up turn switch
-            return true;
+            return DRAW;
         }
         this->turn = this->turn == WHITE ? BLACK : WHITE;// Clean up turn switch
     }
 
-    return false;
+    return NONE_W;
 }

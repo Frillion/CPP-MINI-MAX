@@ -14,7 +14,8 @@ enum Player{
 enum Outcome{
     BLACK_W = -1,
     WHITE_W = 1,
-    DRAW = 2
+    NONE_W = 2,
+    DRAW = 0
 };
 
 struct position{ 
@@ -63,6 +64,6 @@ public:
     State(State& other);
     std::unique_ptr<State> apply_move(const move& mv);
     std::vector<move> get_legal_moves();
-    bool check_win();
+    Outcome check_win();
 };
 
