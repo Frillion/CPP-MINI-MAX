@@ -55,13 +55,16 @@ class State{
     const static position piece_moves[];
     int width;
     int height;
-    std::unordered_map<position, Player> board;
     Player turn;
+    std::unordered_map<position, Player> board;
     bool is_valid_move(const move& mv);
 
 public:
     State(int width,int height);
     State(State& other);
+    const std::unordered_map<position,Player>& get_board(){return this->board;}
+    const int& get_width(){return this->width;}
+    const int& get_height(){return this->height;}
     std::unique_ptr<State> apply_move(const move& mv);
     std::vector<move> get_legal_moves();
     Outcome check_win();
