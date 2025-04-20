@@ -1,9 +1,21 @@
 #include <cstdlib>
-#include <functional>
+#include <memory>
 #include <string>
 #include <unordered_map>
 #include <cmath>
 #include <vector>
+
+enum Player{
+    WHITE = 1,
+    BLACK = -1,
+    NONE = 2
+};
+
+enum Outcome{
+    BLACK_W = -1,
+    WHITE_W = 1,
+    DRAW = 2
+};
 
 struct position{ 
     int x;
@@ -42,13 +54,15 @@ class State{
     const static position piece_moves[];
     int width;
     int height;
-    std::unordered_map<position, std::string> board;
-    std::string turn;
-
-    State(int width,int height);
+    std::unordered_map<position, Player> board;
+    Player turn;
     bool is_valid_move(const move& mv);
 
 public:
-    bool apply_move(const move& mv);
+    State(int width,int height);
+    State(State& other);
+    std::unique_ptr<State> apply_move(const move& mv);
     std::vector<move> get_legal_moves();
+    bool check_win();
 };
+
