@@ -7,7 +7,17 @@ name = "AI"
 version = "0.1"
 
 [tool.setuptools]
-ext-modules = [ { name = "AI.Heuristic", sources = ["cpp_src/AI/heuristic.cpp"], include-dirs = ["includes"], language = "c++" }]
+ext-modules = [{ 
+    name = "AI.Agent", 
+    sources = [
+        "cpp_src/AI/heuristic.cpp",
+        "cpp_src/AI/search.cpp",
+        "cpp_src/AI/state.cpp",
+        "cpp_src/AI/agent.cpp"
+    ],
+    include-dirs = ["includes"],
+    language = "c++" 
+}]
 
 [tool.setuptools.packages.find]
 where = ["cpp_src"]
