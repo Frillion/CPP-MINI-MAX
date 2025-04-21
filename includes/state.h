@@ -1,9 +1,11 @@
 #include <cstdlib>
 #include <memory>
-#include <string>
 #include <unordered_map>
 #include <cmath>
 #include <vector>
+
+#ifndef STATE_REPR
+#define STATE_REPR
 
 enum Player{
     WHITE = 1,
@@ -29,6 +31,13 @@ struct position{
 struct move{
     position from;
     position to;
+
+    move(const move& other){
+        this->from.x = other.from.x;
+        this->from.y = other.from.y;
+        this->to.x = other.to.x;
+        this->to.y = other.to.y;
+    }
 
     position delta() const {
         return {this->to.x - this->from.x, this->to.y - this->from.y};
@@ -65,8 +74,10 @@ public:
     const std::unordered_map<position,Player>& get_board(){return this->board;}
     const int& get_width(){return this->width;}
     const int& get_height(){return this->height;}
+    const Player& get_turn(){return this->turn;}
     std::unique_ptr<State> apply_move(const move& mv);
     std::vector<move> get_legal_moves();
     Outcome check_win();
 };
 
+#endif

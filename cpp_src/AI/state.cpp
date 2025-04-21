@@ -3,6 +3,9 @@
 #include <utility>
 #include <vector>
 
+#ifndef STATE_REPR_IMPL
+#define STATE_REPR_IMPL
+
 const position State::piece_moves[] = {{2, 1}, {1, 2}, {-2, 1}, {-1, 2},{1, 1}, {-1, 1}};
 
 State::State(int width,int height){
@@ -137,3 +140,5 @@ Outcome State::check_win(){
 
     return NONE_W;
 }
+
+#endif

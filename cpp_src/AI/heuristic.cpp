@@ -28,6 +28,6 @@ int evaluate_state(State& st, Player agent_color, Outcome outcome){
         }
     }
 
-    int heuristic_value = ((black_min - 1) - (st.get_height() - white_max)) + (piece_advantage * 10);
+    float heuristic_value = ((black_min - 1) - (st.get_height() - white_max)) + (piece_advantage * 10);
     return heuristic_value * agent_color; 
 }
