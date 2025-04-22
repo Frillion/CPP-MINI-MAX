@@ -9,7 +9,7 @@ Example: gameplayer.py 4001
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import re
 import sys
-from agent import *
+import AI
 
 #########
 
@@ -134,7 +134,7 @@ class GGPRequestHandler(BaseHTTPRequestHandler):
 #########
 
 def main():
-    agent = AI_Agent()
+    agent = AI.Agent()
 
     # read command line argument(s)
     port = 4001

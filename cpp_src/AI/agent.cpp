@@ -1,4 +1,5 @@
 #include "search.h"
+#include <cstring>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -20,14 +21,15 @@ struct Agent{
 };
 
 static PyObject* Agent_start(Agent* self, PyObject* args){
-    std::string role;
+    const char* role_cstr;
     int width;
     int height;
     double play_clock;
-    if(!PyArg_ParseTuple(args, "siid", &role, &width, &height, &play_clock))
+    if(!PyArg_ParseTuple(args, "siid", &role_cstr, &width, &height, &play_clock))
         return NULL;
 
-    if(role == "white"){
+
+    if(strcmp(role_cstr, "white") == 0){
         self->role = WHITE;
         self->my_turn = false;
     }
@@ -99,6 +101,10 @@ static PyObject* Agent_cleanup(Agent* self, PyObject* args){
     Py_RETURN_NONE;
 }
 
+static void Agent_dealloc(Agent* self){
+    Py_TYPE(self)->tp_free((PyObject*) self);
+}
+
 static PyMethodDef Agent_methods[] = {
     {"start", (PyCFunction)Agent_start, METH_VARARGS, "Initailizes the Agent."},
     {"next_action", (PyCFunction)Agent_next_action, METH_VARARGS, "Grabs the next move the agent should play"},
@@ -111,6 +117,7 @@ static PyTypeObject AgentType = {
     .tp_name = "AI.Agent",
     .tp_basicsize = sizeof(Agent),
     .tp_itemsize = 0,
+    .tp_dealloc = (destructor)Agent_dealloc,
     .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
     .tp_methods = Agent_methods,
     .tp_new = PyType_GenericNew,
@@ -124,7 +131,7 @@ static PyModuleDef aimodule = {
 };
 
 PyMODINIT_FUNC
-PyInit_Agent(void){
+PyInit_AI(void){
     PyObject* mod;
     if(PyType_Ready(&AgentType) < 0)
         return NULL;
@@ -138,5 +145,5 @@ PyInit_Agent(void){
         return NULL;
     }
 
-    return NULL;
+    return mod;
 }
