@@ -4,20 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "AI"
-version = "0.1"
+version = "0.5"
 
 [tool.setuptools]
-ext-modules = [{ 
-    name = "AI.Agent", 
-    sources = [
-        "cpp_src/AI/heuristic.cpp",
-        "cpp_src/AI/search.cpp",
-        "cpp_src/AI/state.cpp",
-        "cpp_src/AI/agent.cpp"
-    ],
-    include-dirs = ["includes"],
-    language = "c++" 
-}]
+ext-modules = [{ name = "AI", include-dirs = ["/home/Frillion/Projects/work/T-403-FORC/CPP-MINI-MAX/includes/"], sources = [ "cpp_src/AI/heuristic.cpp", "cpp_src/AI/search.cpp", "cpp_src/AI/state.cpp", "cpp_src/AI/agent.cpp" ], language = "c++" }]
 
 [tool.setuptools.packages.find]
-where = ["cpp_src"]
+where = ["./"]

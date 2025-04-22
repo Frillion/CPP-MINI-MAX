@@ -32,6 +32,18 @@ struct move{
     position from;
     position to;
 
+    move(int x_from, int y_from, int x_to, int  y_to){
+        from.x = x_from;
+        from.y = y_from;
+        to.y = y_to;
+        to.x = x_to;
+    }
+
+    move(const position& from, const position& to){
+        this->from = from;
+        this->to = to;
+    }
+
     move(const move& other){
         this->from.x = other.from.x;
         this->from.y = other.from.y;

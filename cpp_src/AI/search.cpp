@@ -1,9 +1,14 @@
 #include "state.h"
-#include "./heuristic.cpp"
+#include "heuristic.h"
+#include "search.h"
 #include <memory>
 #include <vector>
 #include <limits>
 #include <chrono>
+
+#ifndef SEARCH_ALGORITHMS
+#define SEARCH_ALGORITHMS
+
 
 int negamax(State& st, int depth, int alpha, int beta){
     Outcome state_outcome = st.check_win();
@@ -63,3 +68,5 @@ std::unique_ptr<move> get_best_move_timed(State& root, int max_depth, double tim
 
     return best_move;
 }
+
+#endif
