@@ -25,6 +25,7 @@ static PyObject* Agent_start(Agent* self, PyObject* args){
     int width;
     int height;
     double play_clock;
+
     if(!PyArg_ParseTuple(args, "siid", &role_cstr, &width, &height, &play_clock))
         return NULL;
 
@@ -35,7 +36,7 @@ static PyObject* Agent_start(Agent* self, PyObject* args){
     }
     else{
         self->role = BLACK;
-        self->my_turn = false;
+        self->my_turn = true;
     }
     
     if(!self->root_state){
