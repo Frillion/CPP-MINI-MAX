@@ -84,7 +84,7 @@ static PyObject* Agent_next_action(Agent* self, PyObject* args){
     }
 
     Player agent_col = self->role;
-    std::unique_ptr<move> best_move = get_best_move_timed(*self->root_state, 7, self->play_clock - 1);
+    std::unique_ptr<move> best_move = get_best_move_timed(*self->root_state, 7, self->play_clock, self->role);
 
     if(best_move){
         self->root_state = self->root_state->apply_move(*best_move);

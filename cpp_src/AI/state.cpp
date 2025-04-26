@@ -1,4 +1,5 @@
 #include "state.h"
+#include <cstdlib>
 #include <memory>
 #include <utility>
 #include <vector>
@@ -19,12 +20,6 @@ State::State(int width,int height){
         board[{i,this->height}] = BLACK;
         board[{i,this->height - 1}] = BLACK;
     }
-
-    for(int x = 1; x < width; x++){
-        for(int y = 3; y < this->height - 1; y++){
-            board[{x,y}] = NONE;
-        }
-    }
 }
 
 State::State(State& other){
@@ -37,14 +32,11 @@ State::State(State& other){
 }
 
 bool State::is_valid_move(const move& mv){
-    if(!((1 <= mv.from.x && mv.from.x <= this->width)&& (1 <= mv.from.y && mv.from.y <= this->height))) // mv.from out of bounds
+    if(!((1 <= mv.from.x && mv.from.x <= this->width) && (1 <= mv.from.y && mv.from.y <= this->height))) // mv.from out of bounds
         return false;
 
     if(!((1 <= mv.to.x && mv.to.x <= this->width)&&
          (1 <= mv.to.y && mv.to.y <= this->height))) // mv.to out of bounds
-        return false;
-
-    if(this->board[mv.from] == NONE)// No piece at mv.from
         return false;
 
     Player curr_piece = this->board[mv.from];
@@ -55,14 +47,15 @@ bool State::is_valid_move(const move& mv){
     // Movement restriction, can only move like a knight
     // either one square forward and two squares to the left or right
     // or one square to the left or right and two squares forward
-    if(!((mv.delta().x == 2 && mv.delta().y == 1) || (mv.delta().x == 1 && mv.delta().y == 2)))
+    if(!((std::abs(mv.delta().x) == 2 && std::abs(mv.delta().y) == 1) || (std::abs(mv.delta().x) == 1 && std::abs(mv.delta().y) == 2)))
         return false;
 
     if((curr_piece == WHITE && mv.to.y <= mv.from.y) || 
         (curr_piece == BLACK && mv.to.y >= mv.from.y)) // Pieces cannot move backward
        return false;
 
-    if(this->board[mv.to] != NONE){
+    if((this->board[mv.from] == WHITE && this->board[mv.to] == BLACK) ||
+    (this->board[mv.from] == BLACK && this->board[mv.to] == WHITE)){
         if(mv.delta().x != 1 || mv.delta().y != 1) // Can only capture like a pawn
             return false;
 
@@ -81,7 +74,7 @@ std::unique_ptr<State> State::apply_move(const move& mv){
 
     std::unique_ptr<State> successor = std::make_unique<State>(*this);
     successor->board[mv.to] = successor->board[mv.from];
-    successor->board[mv.from] = NONE;
+    successor->board.erase(mv.from);
     successor->turn = this->turn == WHITE ? BLACK : WHITE;
     return std::move(successor);
 }
@@ -90,8 +83,6 @@ std::vector<move> State::get_legal_moves(){
     std::vector<move> moves;
 
     for(const auto& square: this->board){
-        if(square.second == NONE)
-            continue;
         if(this->turn == BLACK && square.second == WHITE)
             continue;
         if(this->turn == WHITE && square.second == BLACK)
