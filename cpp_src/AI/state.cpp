@@ -99,17 +99,6 @@ std::vector<move> State::get_legal_moves(){
             move move_to_check = {square.first, {square.first.x + delta.x, square.first.y + delta.y}};
 
             if(this->is_valid_move(move_to_check)){
-                if(this->turn == BLACK){
-                    std::cout << "BLACK VALID MOVE:" << std::endl;
-                    std::cout << "FROM: ( " << move_to_check.from.x << " , " << move_to_check.from.y << " )" << std::endl;
-                    std::cout << "TO: ( " << move_to_check.to.x << " , " << move_to_check.to.y << " )" << std::endl;
-                    if(this->board.find(move_to_check.from) == this->board.end()){
-                        std::cout << "ATTEMPT TO MOVE EMPTY SQUARE" << std::endl;
-                    }
-                    if(this->board[move_to_check.from] == WHITE){
-                        std::cout << "ATTEMPT TO MOVE OPPONENT PIECE" << std::endl;
-                    }
-                }
                 moves.push_back(move_to_check);
             }
         }
