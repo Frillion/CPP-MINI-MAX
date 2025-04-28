@@ -91,7 +91,7 @@ static PyObject* Agent_next_action(Agent* self, PyObject* args){
         std::string move_msg;
 
         // Build the string message that will be sent for the move
-        move_msg.append("(move ");
+        move_msg.append("( move ");
         move_msg.append(std::to_string(best_move->from.x));
         move_msg.append(" ");
         move_msg.append(std::to_string(best_move->from.y));
@@ -99,7 +99,7 @@ static PyObject* Agent_next_action(Agent* self, PyObject* args){
         move_msg.append(std::to_string(best_move->to.x));
         move_msg.append(" ");
         move_msg.append(std::to_string(best_move->to.y));
-        move_msg.append(")");
+        move_msg.append(" )");
 
         return Py_BuildValue("s",move_msg.c_str());
     }

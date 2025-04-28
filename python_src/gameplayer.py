@@ -125,7 +125,9 @@ class GGPRequestHandler(BaseHTTPRequestHandler):
         return last_move
 
     def command_play(self, msg):
-        return self.server.agent.next_action(self.parse_move(msg))
+        move = self.server.agent.next_action(self.parse_move(msg))
+        print(move)
+        return move
 
     def command_stop(self, msg):
         self.server.agent.cleanup(self.parse_move(msg))
