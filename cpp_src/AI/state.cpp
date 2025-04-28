@@ -33,40 +33,40 @@ State::State(State& other){
 }
 
 bool State::is_valid_move(const move& mv){
-    if(!((1 <= mv.from.x && mv.from.x <= this->width) && (1 <= mv.from.y && mv.from.y <= this->height))) // mv.from out of bounds
-        return false;
-
-    if(!((1 <= mv.to.x && mv.to.x <= this->width)&&
-         (1 <= mv.to.y && mv.to.y <= this->height))) // mv.to out of bounds
-        return false;
-
-    Player curr_piece = this->board[mv.from];
-    if((curr_piece == WHITE && this->turn != WHITE) || 
-        (curr_piece == BLACK && this->turn != BLACK)) // picking wrong piece
-        return false;
-
-    // Movement restriction, can only move like a knight
-    // either one square forward and two squares to the left or right
-    // or one square to the left or right and two squares forward
-    if(!((std::abs(mv.delta().x) == 2 && std::abs(mv.delta().y) == 1) || (std::abs(mv.delta().x) == 1 && std::abs(mv.delta().y) == 2)))
-        return false;
-
-    if((curr_piece == WHITE && mv.to.y <= mv.from.y) || 
-        (curr_piece == BLACK && mv.to.y >= mv.from.y)) // Pieces cannot move backward
+    if(mv.from.x < 1 || mv.from.x > this->width) // Boundary checking x for current pos
        return false;
 
-    if((this->board[mv.from] == WHITE && this->board[mv.to] == BLACK) ||
-    (this->board[mv.from] == BLACK && this->board[mv.to] == WHITE)){
-        if(mv.delta().x != 1 || mv.delta().y != 1) // Can only capture like a pawn
-            return false;
-
-        if(this->board[mv.to] == curr_piece) // Cannot capture your own color
-            return false;
-    }
-    else if(mv.delta().x == 1 && mv.delta().y == 1) // Cannot move diagonal if not capturing
+    if(mv.from.y < 1 || mv.from.y > this->height)// Boundary checking y for current pos
         return false;
 
-    return true; // All other moves are valid
+    if(mv.to.x < 1 || mv.to.x > this->width)// Boundary checking x for next pos
+        return false;
+
+    if(mv.to.y < 1 || mv.to.y > this->height)// Boundary checking y for next pos
+        return false;
+
+    if(this->board.find(mv.from) == this->board.end())// Piece you're trying to move doesn't exist
+        return false;
+
+    if(this->board[mv.from] != this->turn)
+        return false;
+
+    position delta = mv.delta();
+    if(this->board.find(mv.to) != this->board.end()){// Square we are moving to is occupied
+        if(this->board[mv.to] == this->turn)// Can never move over own piece
+            return false;
+
+        if(std::abs(delta.x) != 1 && std::abs(delta.y) != 1)// Capture Like Pawn Rule
+            return false;
+
+        return true;
+    }
+    
+    if(!((std::abs(delta.x) == 1 && std::abs(delta.y) == 2) ||
+        (std::abs(delta.x) == 2 && std::abs(delta.y) == 1)))
+        return false;
+
+    return true;
 }
 
 std::unique_ptr<State> State::apply_move(const move& mv){

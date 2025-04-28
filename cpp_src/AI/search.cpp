@@ -51,17 +51,22 @@ void output_board(State& st){
     }
 }
 
-std::unique_ptr<move> get_best_move(State& root, int depth, Player agent_color){
+using std::chrono::steady_clock;
+std::unique_ptr<move> get_best_move(State& root, int depth, Player agent_color, steady_clock::time_point start_time, double time_limit){
     std::unique_ptr<move> best_move = nullptr;
     int best_value = std::numeric_limits<int>::min();
 
+
     output_board(root);
     for(const auto& mv : root.get_legal_moves()){
-        //std::cout << "Checking Move: ( move " <<
-        //    mv.from.x << " " << mv.from.y << " " <<
-        //    mv.to.x << " " << mv.to.y << " )" << std::endl;
+        steady_clock::time_point end_time = std::chrono::steady_clock::now();
+        steady_clock::duration time_span = end_time - start_time;
+        double seconds = double(time_span.count()) * steady_clock::period::num / steady_clock::period::den; // Honestly wish there where a better way maybe there is
+
+        if(seconds > time_limit)
+            return nullptr;
+
         std::unique_ptr<State> successor = root.apply_move(mv);
-        //output_board(*successor);
         int eval = -negamax(*successor, depth, std::numeric_limits<int>::min(), std::numeric_limits<int>::max(), agent_color);
         if(eval > best_value)
             best_move = std::make_unique<move>(mv);
@@ -72,7 +77,6 @@ std::unique_ptr<move> get_best_move(State& root, int depth, Player agent_color){
 }
 
 
-using std::chrono::steady_clock;
 
 std::unique_ptr<move> get_best_move_timed(State& root, int max_depth, double time_limit, Player agent_color){
     std::unique_ptr<move> best_move = nullptr;
@@ -89,7 +93,7 @@ std::unique_ptr<move> get_best_move_timed(State& root, int max_depth, double tim
         if(seconds > time_limit)
             break;
 
-        std::unique_ptr<move> mv = get_best_move(root, depth, agent_color);
+        std::unique_ptr<move> mv = get_best_move(root, depth, agent_color, start_time, time_limit);
         if(mv)
             best_move = std::move(mv);
 
