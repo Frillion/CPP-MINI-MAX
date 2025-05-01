@@ -33,38 +33,47 @@ State::State(State& other){
 }
 
 bool State::is_valid_move(const move& mv){
-    if(mv.from.x < 1 || mv.from.x > this->width) // Boundary checking x for current pos
-       return false;
-
-    if(mv.from.y < 1 || mv.from.y > this->height)// Boundary checking y for current pos
+    if(mv.from.x < 1 || mv.from.x > this->width){ // Boundary checking x for current pos
         return false;
+    }
 
-    if(mv.to.x < 1 || mv.to.x > this->width)// Boundary checking x for next pos
+    if(mv.from.y < 1 || mv.from.y > this->height){// Boundary checking y for current pos
         return false;
+    }
 
-    if(mv.to.y < 1 || mv.to.y > this->height)// Boundary checking y for next pos
+    if(mv.to.x < 1 || mv.to.x > this->width){// Boundary checking x for next pos
         return false;
+    }
 
-    if(this->board.find(mv.from) == this->board.end())// Piece you're trying to move doesn't exist
+    if(mv.to.y < 1 || mv.to.y > this->height){// Boundary checking y for next pos
         return false;
+    }
 
-    if(this->board[mv.from] != this->turn)
+    if(this->board.find(mv.from) == this->board.end()){// Piece you're trying to move doesn't exist
         return false;
+    }
+
+    if(this->board[mv.from] != this->turn){
+        return false;
+    }
 
     position delta = mv.delta();
     if(this->board.find(mv.to) != this->board.end()){// Square we are moving to is occupied
-        if(this->board[mv.to] == this->turn)// Can never move over own piece
+        if(this->board[mv.to] == this->turn){// Can never move over own piece
             return false;
+        }
 
-        if(std::abs(delta.x) != 1 && std::abs(delta.y) != 1)// Capture Like Pawn Rule
+        if(std::abs(delta.x) != 1 || std::abs(delta.y) != 1){// Capture Like Pawn Rule
             return false;
+        }
 
         return true;
     }
     
     if(!((std::abs(delta.x) == 1 && std::abs(delta.y) == 2) ||
-        (std::abs(delta.x) == 2 && std::abs(delta.y) == 1)))
+        (std::abs(delta.x) == 2 && std::abs(delta.y) == 1))){
         return false;
+    }
 
     return true;
 }

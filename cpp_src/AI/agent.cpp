@@ -68,7 +68,7 @@ static PyObject* Agent_next_action(Agent* self, PyObject* args){
 
     self->my_turn = (!self->my_turn);
     if(!self->my_turn)
-        return Py_BuildValue("s","NOOP");
+        return Py_BuildValue("s","noop");
 
     if(last_move){
         std::unique_ptr<move> mv = std::make_unique<move>(x_from, y_from, x_to, y_to);
@@ -104,7 +104,7 @@ static PyObject* Agent_next_action(Agent* self, PyObject* args){
         return Py_BuildValue("s",move_msg.c_str());
     }
     else{
-        return Py_BuildValue("s","NOOP");
+        return Py_BuildValue("s","noop");
     }
 }
 
