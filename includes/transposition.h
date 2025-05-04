@@ -1,0 +1,36 @@
+#include "state.h"
+#include <unordered_map>
+#ifndef TRANSPOSITION_HEAD
+#define TRANSPOSITION_HEAD
+
+enum evalType{
+    UPPERBOUND = 1,
+    LOWERBOUND = 2,
+    EXACT = 3
+};
+
+struct ttEntry{
+    int depth;
+    int value;
+    evalType flag;
+    char access;
+};
+
+class TranspositionTable{
+    TranspositionTable();
+    void zorbist_init(int width, int height);
+    int zorbist_hash(const State& st);
+
+    void LRU_Clock();
+
+    static TranspositionTable instance;
+    std::unordered_map<int, ttEntry> ttable;
+
+public:
+    TranspositionTable(const TranspositionTable&) = delete;
+    TranspositionTable& operator=(const TranspositionTable&) = delete;
+    static TranspositionTable& getInstance();
+    void insert(State& st, ttEntry& entry);
+    const ttEntry& operator[](State& st);
+};
+#endif

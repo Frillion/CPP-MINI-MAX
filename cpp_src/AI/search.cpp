@@ -1,5 +1,6 @@
 #include "state.h"
 #include "heuristic.h"
+#include "transposition.h"
 #include "search.h"
 #include <iostream>
 #include <memory>
@@ -14,6 +15,20 @@ static int num_expansions = 0;
 
 
 int negamax(State& st, int depth, int alpha, int beta, Player agent_color){
+    int original_alpha = alpha;
+
+    ttEntry ent = TranspositionTable::getInstance()[st];
+    if(ent.access && ent.depth >= depth){
+        if(ent.flag == EXACT)
+            return ent.value;
+
+        if(ent.flag == LOWERBOUND && ent.value >= beta)
+            return ent.value;
+
+        if(ent.flag == UPPERBOUND && ent.value <= alpha)
+            return ent.value;
+    }
+
     Outcome state_outcome = st.check_win();
     if(depth == 0 || state_outcome != NONE_W)
         return evaluate_state(st, agent_color, state_outcome);
@@ -29,6 +44,20 @@ int negamax(State& st, int depth, int alpha, int beta, Player agent_color){
         if(alpha >= beta)
             break;
     }
+
+    ttEntry new_entry;
+    new_entry.value = value;
+    if(value <= original_alpha)
+        new_entry.flag = UPPERBOUND;
+    else if(value >= beta)
+        new_entry.flag = LOWERBOUND;
+    else
+        new_entry.flag = EXACT;
+
+    new_entry.depth = depth;
+    new_entry.access = 1;
+
+    TranspositionTable::getInstance().insert(st, new_entry);
 
     return value;
 }
