@@ -1,5 +1,6 @@
 #include "state.h"
 #include <unordered_map>
+#include <vector>
 #ifndef TRANSPOSITION_HEAD
 #define TRANSPOSITION_HEAD
 
@@ -24,7 +25,9 @@ class TranspositionTable{
     void LRU_Clock();
 
     static TranspositionTable instance;
+    std::vector<std::vector<int>> hash_keys;
     std::unordered_map<int, ttEntry> ttable;
+    int black_move;
 
 public:
     TranspositionTable(const TranspositionTable&) = delete;

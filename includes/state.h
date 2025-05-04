@@ -83,10 +83,10 @@ class State{
 public:
     State(int width,int height);
     State(State& other);
-    const std::unordered_map<position,Player>& get_board(){return this->board;}
-    const int& get_width(){return this->width;}
-    const int& get_height(){return this->height;}
-    const Player& get_turn(){return this->turn;}
+    const std::unordered_map<position,Player>& get_board()const {return this->board;}
+    const int& get_width()const {return this->width;}
+    const int& get_height()const {return this->height;}
+    const Player& get_turn()const {return this->turn;}
     std::unique_ptr<State> apply_move(const move& mv);
     std::vector<move> get_legal_moves();
     Outcome check_win();
