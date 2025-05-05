@@ -49,8 +49,10 @@ int negamax(State& st, int depth, int alpha, int beta, Player agent_color){
     new_entry.value = value;
     if(value <= original_alpha)
         new_entry.flag = UPPERBOUND;
+
     else if(value >= beta)
         new_entry.flag = LOWERBOUND;
+
     else
         new_entry.flag = EXACT;
 
@@ -72,6 +74,7 @@ void output_board(State& st){
                 Player color = piece->second;
                 if(color == WHITE)
                     std::cout << "| W |";
+
                 if(color == BLACK)
                     std::cout << "| B |";
             }
