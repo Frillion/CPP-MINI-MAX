@@ -177,3 +177,4 @@ logs/
 bin/
 objects/
 compile_commands.json
+build_logs/
