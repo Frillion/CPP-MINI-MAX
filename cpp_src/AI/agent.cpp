@@ -1,4 +1,5 @@
 #include "search.h"
+#include "transposition.h"
 #include <cstring>
 #include <iostream>
 #include <memory>
@@ -29,6 +30,7 @@ static PyObject* Agent_start(Agent* self, PyObject* args){
     if(!PyArg_ParseTuple(args, "siid", &role_cstr, &width, &height, &play_clock))
         return NULL;
 
+    TranspositionTable::getInstance().zorbist_init(width, height);
 
     if(strcmp(role_cstr, "white") == 0){
         self->role = WHITE;

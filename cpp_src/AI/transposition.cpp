@@ -1,4 +1,5 @@
 #include "transposition.h"
+#include <cmath>
 #include <random>
 #ifndef TRANSPOSITION_CPP
 #define TRANSPOSITION_CPP
@@ -21,10 +22,23 @@ int TranspositionTable::zorbist_hash(const State& st){
         zorbist ^= this->black_move;
 
     const std::unordered_map<position,Player> board = st.get_board();
-    for(int i = 0; i < st.get_width()*st.get_height(); i++){
+    for(const auto entry: board){
+        int square_index = std::sqrt(std::pow(entry.first.x - 1, 2) + std::pow(entry.first.y - 1, 2));
+        if(entry.second == WHITE){
+            zorbist ^= this->hash_keys[square_index][1];
+        }
+        else if(entry.second == BLACK){
+            zorbist ^= this->hash_keys[square_index][2];
+        }
     }
 
     return zorbist;
+}
+
+TranspositionTable::TranspositionTable(){}
+
+void TranspositionTable::LRU_Clock(){
+
 }
 
 #endif

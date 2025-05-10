@@ -19,7 +19,6 @@ struct ttEntry{
 
 class TranspositionTable{
     TranspositionTable();
-    void zorbist_init(int width, int height);
     int zorbist_hash(const State& st);
 
     void LRU_Clock();
@@ -32,8 +31,9 @@ class TranspositionTable{
 public:
     TranspositionTable(const TranspositionTable&) = delete;
     TranspositionTable& operator=(const TranspositionTable&) = delete;
-    static TranspositionTable& getInstance();
+    static TranspositionTable& getInstance(){return instance;}
     void insert(State& st, ttEntry& entry);
+    void zorbist_init(int width, int height);
     const ttEntry& operator[](State& st);
 };
 #endif
